@@ -26,7 +26,7 @@ public class ProdutoController {
 
     @PutMapping("/status")
 public ResponseEntity<String> mudarStatus(@RequestHeader("Admin-Key") String key, @RequestBody boolean aberto) {
-    if (!"sua-chave-secreta-123".equals(key)) {
+    if (!"arthur123".equals(key)) {
         return ResponseEntity.status(403).body("Acesso negado!");
     }
     // lógica para mudar status...

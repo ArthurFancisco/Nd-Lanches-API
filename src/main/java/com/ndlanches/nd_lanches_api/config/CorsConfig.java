@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // Libera o acesso para o seu frontend no Firebase e testes locais
-        registry.addMapping("/api/**")
+        registry.addMapping("/**")
                 .allowedOrigins(
                     "https://ndlanches-e7ccf.web.app", 
                     "https://ndlanches-e7ccf.firebaseapp.com",
