@@ -17,18 +17,16 @@ public class LojaController {
     private LojaService service;
 
     // Rota que o JavaScript chama: /api/loja/nd-lanches/status
-   @GetMapping("/{slug}/status")
+   @GetMapping("/{slug}/status") // Aqui o Java aceita String (nd-lanches)
 public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
     Loja loja = service.buscarPorSlug(slug);
-    return ResponseEntity.ok(loja.getAberto()); 
+    return ResponseEntity.ok(loja.getAberto());
 }
-    // Rota para mudar o status (chamada no alternarStatus do admin)
-    @PutMapping("/status")
-    public ResponseEntity<String> mudarStatus(@RequestHeader("Admin-Key") String key, @RequestBody boolean aberto) {
-        if (!"arthur123".equals(key)) {
-            return ResponseEntity.status(403).body("Chave incorreta!");
-        }
-        service.atualizarStatus(1L, aberto); // 1L é o ID da sua loja
-        return ResponseEntity.ok("Status atualizado!");
-    }
+
+@PutMapping("/status") // Rota para o Admin mudar o status
+public ResponseEntity<String> mudarStatus(@RequestHeader("Admin-Key") String key, @RequestBody boolean aberto) {
+    if (!"arthur123".equals(key)) return ResponseEntity.status(403).body("Chave incorreta!");
+    service.atualizarStatus(1L, aberto); 
+    return ResponseEntity.ok("Status atualizado!");
+}
 }
