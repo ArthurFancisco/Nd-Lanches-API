@@ -9,21 +9,26 @@ import com.ndlanches.nd_lanches_api.entity.Loja;
 import com.ndlanches.nd_lanches_api.service.LojaService;
 
 @RestController
-@RequestMapping("/api/loja")
+@RequestMapping("/api/loja") // Define a base da URL
+@CrossOrigin("*")
 public class LojaController {
 
     @Autowired
-    private com.ndlanches.nd_lanches_api.service.LojaService lojaService; // Você precisa injetar o serviço da loja
+    private LojaService service;
 
+    // Rota que o JavaScript chama: /api/loja/nd-lanches/status
+   @GetMapping("/{slug}/status")
+public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
+    Loja loja = service.buscarPorSlug(slug);
+    return ResponseEntity.ok(loja.getAberto()); 
+}
+    // Rota para mudar o status (chamada no alternarStatus do admin)
     @PutMapping("/status")
     public ResponseEntity<String> mudarStatus(@RequestHeader("Admin-Key") String key, @RequestBody boolean aberto) {
         if (!"arthur123".equals(key)) {
-            return ResponseEntity.status(403).body("Acesso negado!");
+            return ResponseEntity.status(403).body("Chave incorreta!");
         }
-        
-        // ESTA É A LINHA QUE ESTAVA FALTANDO:
-        lojaService.atualizarStatus(1L, aberto); 
-        
-        return ResponseEntity.ok("Status alterado no banco de dados!");
+        service.atualizarStatus(1L, aberto); // 1L é o ID da sua loja
+        return ResponseEntity.ok("Status atualizado!");
     }
 }

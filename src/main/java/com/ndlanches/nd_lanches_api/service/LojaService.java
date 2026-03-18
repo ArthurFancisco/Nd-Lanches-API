@@ -15,10 +15,17 @@ public class LojaService {
     @Autowired
     private LojaRepository repository;
 
-    // Busca a loja pelo slug (ex: nd-lanches) para o frontend
-    public Optional<Loja> buscarPorSlug(String slug) {
-        return repository.findBySlug(slug);
-    }
+
+    public Loja buscarPorSlug(String slug) {
+    return repository.findBySlug(slug)
+        .orElseThrow(() -> new RuntimeException("Loja não encontrada!"));
+        }
+
+        public void atualizarStatus(Long id, boolean aberto) {
+            Loja loja = repository.findById(id).orElseThrow();
+            loja.setAberto(aberto);
+            repository.save(loja); // Isso garante que o F5 mantenha a loja fechada
+        }
 
     // Abre ou fecha a loja
     public Loja alternarStatus(String slug, boolean aberto) {
@@ -34,9 +41,4 @@ public class LojaService {
         return repository.save(loja);
     }
 
-    public void atualizarStatus(Long id, boolean aberto) {
-    Loja loja = repository.findById(id).orElseThrow();
-    loja.setAberto(aberto);
-    repository.save(loja);
-}
 }
