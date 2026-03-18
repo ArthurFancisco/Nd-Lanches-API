@@ -28,4 +28,14 @@ public class ProdutoService {
     public void excluir(Long id) {
         repository.deleteById(id);
     }
+
+    // Edita um produto
+    public Produto editar(Long id, Produto dadosNovos) {
+    return repository.findById(id).map(produto -> {
+        produto.setNome(dadosNovos.getNome());
+        produto.setDescricao(dadosNovos.getDescricao());
+        produto.setPreco(dadosNovos.getPreco());
+        return repository.save(produto);
+    }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+}
 }
