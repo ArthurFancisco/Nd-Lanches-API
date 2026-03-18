@@ -33,4 +33,10 @@ public class LojaService {
     public Loja salvar(Loja loja) {
         return repository.save(loja);
     }
+
+    public void atualizarStatus(Long id, boolean aberto) {
+    Loja loja = repository.findById(id).orElseThrow();
+    loja.setAberto(aberto);
+    repository.save(loja);
+}
 }
