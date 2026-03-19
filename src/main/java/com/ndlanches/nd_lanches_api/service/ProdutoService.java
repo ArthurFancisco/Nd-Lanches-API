@@ -29,13 +29,20 @@ public class ProdutoService {
         repository.deleteById(id);
     }
 
-    // Edita um produto
+    // CORRIGIDO: agora atualiza TODOS os campos relevantes do produto
     public Produto editar(Long id, Produto dadosNovos) {
-    return repository.findById(id).map(produto -> {
-        produto.setNome(dadosNovos.getNome());
-        produto.setDescricao(dadosNovos.getDescricao());
-        produto.setPreco(dadosNovos.getPreco());
-        return repository.save(produto);
-    }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-}
+        return repository.findById(id).map(produto -> {
+            produto.setNome(dadosNovos.getNome());
+            produto.setDescricao(dadosNovos.getDescricao());
+            produto.setPreco(dadosNovos.getPreco());
+            produto.setCategoria(dadosNovos.getCategoria());
+            produto.setEmoji(dadosNovos.getEmoji());
+            produto.setAtivo(dadosNovos.getAtivo());
+            produto.setOrdem(dadosNovos.getOrdem());
+            produto.setTagTipo(dadosNovos.getTagTipo());
+            produto.setTagTexto(dadosNovos.getTagTexto());
+            produto.setRemoviveis(dadosNovos.getRemoviveis()); // lista de ingredientes removíveis
+            return repository.save(produto);
+        }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+    }
 }
