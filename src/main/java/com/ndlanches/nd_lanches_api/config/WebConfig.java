@@ -10,16 +10,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("*")
-                // ✅ PATCH adicionado — necessário para /banners/{id}/toggle e /pedidos/{id}/status
+        registry.addMapping("/**") // Alterado de /api/** para /** para cobrir tudo
+                .allowedOriginPatterns("*") // Mais seguro para produção
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                .allowedHeaders("*");
-    }
-
-    @Bean
-    public String adminKeyBean(
-            @org.springframework.beans.factory.annotation.Value("${admin.key}") String adminKey) {
-        return adminKey;
+                .allowedHeaders("*")
+                .allowCredentials(false);
     }
 }
