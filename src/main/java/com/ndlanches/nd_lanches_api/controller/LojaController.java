@@ -1,42 +1,65 @@
-package com.ndlanches.nd_lanches_api.controller;
+    package com.ndlanches.nd_lanches_api.controller;
 
-import com.ndlanches.nd_lanches_api.config.AdminKeyValidator;
-import com.ndlanches.nd_lanches_api.entity.Loja;
-import com.ndlanches.nd_lanches_api.service.LojaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+    import com.ndlanches.nd_lanches_api.config.AdminKeyValidator;
+    import com.ndlanches.nd_lanches_api.entity.Loja;
+    import com.ndlanches.nd_lanches_api.service.LojaService;
 
-@RestController
-@RequestMapping("/api/loja")
-public class LojaController {
+    import java.util.Map;
 
-    @Autowired
-    private LojaService service;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.bind.annotation.*;
 
-    @Autowired
-    private AdminKeyValidator adminKey;
+    @RestController
+    @RequestMapping("/api/loja")
+    public class LojaController {
 
-    // ✅ NOVO: retorna dados completos da loja (público)
-    @GetMapping("/{slug}")
-    public ResponseEntity<Loja> getLoja(@PathVariable String slug) {
+        @Autowired
+        private LojaService service;
+
+        @Autowired
+        private AdminKeyValidator adminKey;
+
+        // ✅ NOVO: retorna dados completos da loja (público)
+        @GetMapping("/{slug}")
+        public ResponseEntity<Loja> getLoja(@PathVariable String slug) {
+            Loja loja = service.buscarPorSlug(slug);
+            return ResponseEntity.ok(loja);
+        }
+
+        @PutMapping("/{slug}")
+    public ResponseEntity<?> atualizarLoja(
+            @RequestHeader("Admin-Key") String key,
+            @PathVariable String slug,
+            @RequestBody Map<String, String> dados) {
+
+        if (adminKey.invalido(key)) return adminKey.negado();
+
         Loja loja = service.buscarPorSlug(slug);
+        if (dados.containsKey("whatsapp")) {
+            loja.setWhatsapp(dados.get("whatsapp"));
+        }
+        if (dados.containsKey("mensagemFechado")) {
+            loja.setMensagemFechado(dados.get("mensagemFechado"));
+        }
+        // Outros campos podem ser adicionados (nome, etc.)
+        service.salvar(loja);
         return ResponseEntity.ok(loja);
     }
 
-    @GetMapping("/{slug}/status")
-    public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
-        Loja loja = service.buscarPorSlug(slug);
-        return ResponseEntity.ok(loja.getAberto());
-    }
+        @GetMapping("/{slug}/status")
+        public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
+            Loja loja = service.buscarPorSlug(slug);
+            return ResponseEntity.ok(loja.getAberto());
+        }
 
-    @PutMapping("/status")
-    public ResponseEntity<String> mudarStatus(
-            @RequestHeader("Admin-Key") String key,
-            @RequestBody boolean aberto) {
+        @PutMapping("/status")
+        public ResponseEntity<String> mudarStatus(
+                @RequestHeader("Admin-Key") String key,
+                @RequestBody boolean aberto) {
 
-        if (adminKey.invalido(key)) return adminKey.negado();
-        service.atualizarStatus(1L, aberto);
-        return ResponseEntity.ok("Status atualizado!");
+            if (adminKey.invalido(key)) return adminKey.negado();
+            service.atualizarStatus(1L, aberto);
+            return ResponseEntity.ok("Status atualizado!");
+        }
     }
-}
