@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * ✅ @CrossOrigin removido — agora está centralizado no WebConfig.
- */
 @RestController
 @RequestMapping("/api/loja")
 public class LojaController {
@@ -18,7 +15,14 @@ public class LojaController {
     private LojaService service;
 
     @Autowired
-    private AdminKeyValidator adminKey; // ✅ injeta o validador
+    private AdminKeyValidator adminKey;
+
+    // ✅ NOVO: retorna dados completos da loja (público)
+    @GetMapping("/{slug}")
+    public ResponseEntity<Loja> getLoja(@PathVariable String slug) {
+        Loja loja = service.buscarPorSlug(slug);
+        return ResponseEntity.ok(loja);
+    }
 
     @GetMapping("/{slug}/status")
     public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
@@ -31,8 +35,7 @@ public class LojaController {
             @RequestHeader("Admin-Key") String key,
             @RequestBody boolean aberto) {
 
-        if (adminKey.invalido(key)) return adminKey.negado(); // ✅ uma linha só
-
+        if (adminKey.invalido(key)) return adminKey.negado();
         service.atualizarStatus(1L, aberto);
         return ResponseEntity.ok("Status atualizado!");
     }
