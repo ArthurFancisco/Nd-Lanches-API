@@ -20,18 +20,21 @@ public class UploadController {
     private AdminKeyValidator adminKey;
 
     @PostMapping("/imagem")
-    public ResponseEntity<?> uploadImagem(
-            @RequestHeader("Admin-Key") String key,
-            @RequestParam("file") MultipartFile file) {
+public ResponseEntity<?> uploadImagem(
+        @RequestHeader("Admin-Key") String key,
+        @RequestParam("file") MultipartFile file) {
 
-        if (adminKey.invalido(key)) return adminKey.negado();
+    if (adminKey.invalido(key)) return adminKey.negado();
 
-        try {
-            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), Map.of());
-            String imageUrl = uploadResult.get("secure_url").toString();
-            return ResponseEntity.ok(Map.of("url", imageUrl));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro no upload: " + e.getMessage());
-        }
+    try {
+        System.out.println("Recebido upload: " + file.getOriginalFilename() + ", tamanho: " + file.getSize());
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), Map.of());
+        String imageUrl = uploadResult.get("secure_url").toString();
+        System.out.println("Upload bem-sucedido: " + imageUrl);
+        return ResponseEntity.ok(Map.of("url", imageUrl));
+    } catch (Exception e) {
+        e.printStackTrace(); // Isso aparecerá nos logs do Render
+        return ResponseEntity.status(500).body("Erro no upload: " + e.getMessage());
     }
+}
 }
