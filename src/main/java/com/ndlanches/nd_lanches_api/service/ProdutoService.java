@@ -29,7 +29,7 @@ public class ProdutoService {
         repository.deleteById(id);
     }
 
-    // CORRIGIDO: agora atualiza TODOS os campos relevantes do produto
+    // Atualiza todos os campos relevantes do produto
     public Produto editar(Long id, Produto dadosNovos) {
         return repository.findById(id).map(produto -> {
             produto.setNome(dadosNovos.getNome());
@@ -41,7 +41,8 @@ public class ProdutoService {
             produto.setOrdem(dadosNovos.getOrdem());
             produto.setTagTipo(dadosNovos.getTagTipo());
             produto.setTagTexto(dadosNovos.getTagTexto());
-            produto.setRemoviveis(dadosNovos.getRemoviveis()); // lista de ingredientes removíveis
+            produto.setRemoviveis(dadosNovos.getRemoviveis());
+            produto.setImagemUrl(dadosNovos.getImagemUrl());
             return repository.save(produto);
         }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }

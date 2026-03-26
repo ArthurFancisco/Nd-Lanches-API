@@ -47,6 +47,9 @@ public class Produto {
     @Column(nullable = false)
     private Boolean ativo = true;
 
+    @Column(name = "imagem_url")
+    private String imagemUrl;
+
     private Integer ordem = 0; // Para ordenar o cardápio (ex: 1º o mais caro)
 
     @ManyToOne // Muitos produtos para uma loja
