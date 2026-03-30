@@ -1,33 +1,32 @@
-    package com.ndlanches.nd_lanches_api.controller;
+package com.ndlanches.nd_lanches_api.controller;
 
-    import com.ndlanches.nd_lanches_api.config.AdminKeyValidator;
-    import com.ndlanches.nd_lanches_api.entity.Loja;
-    import com.ndlanches.nd_lanches_api.service.LojaService;
+import com.ndlanches.nd_lanches_api.config.AdminKeyValidator;
+import com.ndlanches.nd_lanches_api.entity.Loja;
+import com.ndlanches.nd_lanches_api.service.LojaService;
 
-    import java.util.Map;
+import java.util.Map;
 
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    @RestController
-    @RequestMapping("/api/loja")
-    public class LojaController {
+@RestController
+@RequestMapping("/api/loja")
+public class LojaController {
 
-        @Autowired
-        private LojaService service;
+    @Autowired
+    private LojaService service;
 
-        @Autowired
-        private AdminKeyValidator adminKey;
+    @Autowired
+    private AdminKeyValidator adminKey;
 
-        // ✅ NOVO: retorna dados completos da loja (público)
-        @GetMapping("/{slug}")
-        public ResponseEntity<Loja> getLoja(@PathVariable String slug) {
-            Loja loja = service.buscarPorSlug(slug);
-            return ResponseEntity.ok(loja);
-        }
+    @GetMapping("/{slug}")
+    public ResponseEntity<Loja> getLoja(@PathVariable String slug) {
+        Loja loja = service.buscarPorSlug(slug);
+        return ResponseEntity.ok(loja);
+    }
 
-        @PutMapping("/{slug}")
+    @PutMapping("/{slug}")
     public ResponseEntity<?> atualizarLoja(
             @RequestHeader("Admin-Key") String key,
             @PathVariable String slug,
@@ -42,24 +41,32 @@
         if (dados.containsKey("mensagemFechado")) {
             loja.setMensagemFechado(dados.get("mensagemFechado"));
         }
-        // Outros campos podem ser adicionados (nome, etc.)
+        // NOVO: horário de funcionamento
+        if (dados.containsKey("horarioFuncionamento")) {
+            loja.setHorarioFuncionamento(dados.get("horarioFuncionamento"));
+        }
+        // Opcional: permitir editar nome
+        if (dados.containsKey("nome")) {
+            loja.setNome(dados.get("nome"));
+        }
+
         service.salvar(loja);
         return ResponseEntity.ok(loja);
     }
 
-        @GetMapping("/{slug}/status")
-        public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
-            Loja loja = service.buscarPorSlug(slug);
-            return ResponseEntity.ok(loja.getAberto());
-        }
-
-        @PutMapping("/status")
-        public ResponseEntity<String> mudarStatus(
-                @RequestHeader("Admin-Key") String key,
-                @RequestBody boolean aberto) {
-
-            if (adminKey.invalido(key)) return adminKey.negado();
-            service.atualizarStatus(1L, aberto);
-            return ResponseEntity.ok("Status atualizado!");
-        }
+    @GetMapping("/{slug}/status")
+    public ResponseEntity<Boolean> getStatus(@PathVariable String slug) {
+        Loja loja = service.buscarPorSlug(slug);
+        return ResponseEntity.ok(loja.getAberto());
     }
+
+    @PutMapping("/status")
+    public ResponseEntity<String> mudarStatus(
+            @RequestHeader("Admin-Key") String key,
+            @RequestBody boolean aberto) {
+
+        if (adminKey.invalido(key)) return adminKey.negado();
+        service.atualizarStatus(1L, aberto);
+        return ResponseEntity.ok("Status atualizado!");
+    }
+}

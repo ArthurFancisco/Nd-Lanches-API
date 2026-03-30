@@ -30,4 +30,8 @@ public class Loja {
 
     @Column(name = "mensagem_fechado", length = 200)
     private String mensagemFechado = "Voltamos em breve!";
+
+    // NOVO CAMPO: horário de funcionamento (texto livre)
+    @Column(name = "horario_funcionamento", length = 200)
+    private String horarioFuncionamento = "Segunda a sábado, 18h às 23h";
 }
