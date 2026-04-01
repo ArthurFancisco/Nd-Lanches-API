@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=nd_lanches
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: nd_lanches_api
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/nd_lanches
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - ADMIN_KEY=${ADMIN_KEY}
+      - CLOUDINARY_URL=${CLOUDINARY_URL}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      
