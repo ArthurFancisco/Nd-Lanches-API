@@ -11,6 +11,8 @@ services:
       - POSTGRES_DB=nd_lanches
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data   # volume nomeado para persistência
 
   app:
     build: .
@@ -27,5 +29,6 @@ services:
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - ADMIN_KEY=${ADMIN_KEY}
       - CLOUDINARY_URL=${CLOUDINARY_URL}
-      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
-      
+
+volumes:
+  postgres_data:   # declaração do volume (fora de services)
