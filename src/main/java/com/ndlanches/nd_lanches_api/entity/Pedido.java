@@ -32,8 +32,9 @@ public class Pedido {
     private BigDecimal total;
 
     // Status do pedido
+   @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private String status = "RECEBIDO"; // RECEBIDO, PREPARO, PRONTO, ENTREGUE, CANCELADO
+    private StatusPedido status = StatusPedido.RECEBIDO;
 
     // Itens do pedido em JSON (mais simples que criar outra tabela agora)
     @Column(name = "itens_json", columnDefinition = "TEXT", nullable = false)
@@ -47,4 +48,12 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "loja_id", nullable = false)
     private Loja loja;
+
+    @Column(name = "atualizado_em")
+    private LocalDateTime atualizadoEm;
+
+   public enum StatusPedido {
+    RECEBIDO, PREPARO, PRONTO, ENTREGUE, CANCELADO
+}
+
 }

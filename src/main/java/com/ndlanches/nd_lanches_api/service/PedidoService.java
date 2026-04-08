@@ -1,6 +1,7 @@
 package com.ndlanches.nd_lanches_api.service;
 
 import com.ndlanches.nd_lanches_api.entity.Pedido;
+import com.ndlanches.nd_lanches_api.entity.Pedido.StatusPedido;
 import com.ndlanches.nd_lanches_api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,11 @@ public class PedidoService {
 
     // Cliente envia o pedido — salva e retorna com ID gerado
     public Pedido salvar(Pedido pedido) {
-        pedido.setCriadoEm(LocalDateTime.now());
-        pedido.setStatus("RECEBIDO");
-        return repository.save(pedido);
+    pedido.setCriadoEm(LocalDateTime.now());
+    pedido.setStatus(StatusPedido.RECEBIDO);   // ← setStatus, não setStatusPedido
+    return repository.save(pedido);
     }
+
 
     // Admin vê todos os pedidos da loja
     public List<Pedido> listarPorLoja(Long lojaId) {
@@ -36,10 +38,11 @@ public class PedidoService {
 
     // Admin atualiza o status (RECEBIDO → PREPARO → PRONTO → ENTREGUE)
     public Pedido atualizarStatus(Long id, String novoStatus) {
-        return repository.findById(id).map(p -> {
-            p.setStatus(novoStatus);
-            return repository.save(p);
-        }).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+    return repository.findById(id).map(p -> {
+        p.setStatus(StatusPedido.valueOf(novoStatus));
+        p.setAtualizadoEm(LocalDateTime.now());
+        return repository.save(p);
+    }).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
     }
 
     // Admin cancela ou remove pedido

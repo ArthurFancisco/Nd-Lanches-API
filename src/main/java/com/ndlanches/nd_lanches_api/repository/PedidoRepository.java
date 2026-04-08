@@ -1,6 +1,8 @@
 package com.ndlanches.nd_lanches_api.repository;
 
 import com.ndlanches.nd_lanches_api.entity.Pedido;
+import com.ndlanches.nd_lanches_api.entity.Pedido.StatusPedido;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,4 +18,5 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
         LocalDateTime inicio,
         LocalDateTime fim
     );
+    List<Pedido> findByStatusAndCriadoEmBefore(StatusPedido status, LocalDateTime dataLimite);
 }

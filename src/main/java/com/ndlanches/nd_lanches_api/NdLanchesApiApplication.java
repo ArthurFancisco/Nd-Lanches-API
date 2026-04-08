@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.ndlanches.nd_lanches_api.entity.Loja;
 import com.ndlanches.nd_lanches_api.entity.Produto;
@@ -12,6 +13,7 @@ import com.ndlanches.nd_lanches_api.repository.LojaRepository;
 import com.ndlanches.nd_lanches_api.repository.ProdutoRepository;
 
 @SpringBootApplication
+@EnableScheduling  
 public class NdLanchesApiApplication {
 
 	public static void main(String[] args) {
