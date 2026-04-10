@@ -62,4 +62,15 @@ public class ProdutoController {
         service.excluir(id);
         return ResponseEntity.ok("Produto removido com sucesso!");
     }
+
+    // ProdutoController.java
+        @GetMapping("/admin/loja/{lojaId}")
+        public ResponseEntity<?> listarTodosPorLoja(
+                @RequestHeader("Admin-Key") String key,
+                @PathVariable Long lojaId) {
+
+            if (adminKey.invalido(key)) return adminKey.negado();
+
+            return ResponseEntity.ok(service.listarTodosPorLoja(lojaId));
+        }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findByLojaIdAndAtivoTrueOrderByOrdemAsc(Long lojaId);
+    // ProdutoRepository.java
+List<Produto> findByLojaIdOrderByOrdemAsc(Long lojaId);
 }

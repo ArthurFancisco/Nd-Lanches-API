@@ -18,6 +18,10 @@ public class ProdutoService {
     public List<Produto> listarAtivosPorLoja(Long lojaId) {
         return repository.findByLojaIdAndAtivoTrueOrderByOrdemAsc(lojaId);
     }
+            public List<Produto> listarTodosPorLoja(Long lojaId) {
+            return repository.findByLojaIdOrderByOrdemAsc(lojaId);
+        }
+
 
     // Salva ou atualiza um produto (usado pelo Admin)
     public Produto salvar(Produto produto) {
