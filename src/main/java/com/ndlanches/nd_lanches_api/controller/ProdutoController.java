@@ -73,4 +73,8 @@ public class ProdutoController {
 
             return ResponseEntity.ok(service.listarTodosPorLoja(lojaId));
         }
+        @GetMapping("/loja/{lojaId}/cardapio")
+        public List<Produto> listarCardapio(@PathVariable Long lojaId) {
+            return service.listarTodosPorLoja(lojaId); // usa o método que você já criou para o admin
+        }
 }
