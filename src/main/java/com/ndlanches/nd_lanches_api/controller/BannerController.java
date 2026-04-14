@@ -26,12 +26,10 @@ public class BannerController {
 
     // 🔒 ADMIN — lista todos (ativos e inativos)
     @GetMapping("/loja/{lojaId}")
-    public ResponseEntity<?> listarTodos(
-            @RequestHeader("Admin-Key") String key,
-            @PathVariable Long lojaId) {
-        if (adminKey.invalido(key)) return adminKey.negado();
-        return ResponseEntity.ok(service.listarTodosPorLoja(lojaId));
-    }
+public ResponseEntity<List<Banner>> listarPorLoja(@PathVariable Long lojaId) {
+    List<Banner> banners = service.listarPorLoja(lojaId);
+    return ResponseEntity.ok(banners);
+}
 
     // 🔒 ADMIN — criar banner
     @PostMapping

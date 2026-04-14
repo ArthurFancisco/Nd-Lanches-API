@@ -16,6 +16,9 @@ public class BannerService {
     public List<Banner> listarAtivosPorLoja(Long lojaId) {
         return repository.findByLojaIdAndAtivoTrue(lojaId);
     }
+    public List<Banner> listarPorLoja(Long lojaId) {
+    return repository.findByLojaIdAndAtivoTrue(lojaId);
+}
 
     // Admin — todos os banners
     public List<Banner> listarTodosPorLoja(Long lojaId) {
