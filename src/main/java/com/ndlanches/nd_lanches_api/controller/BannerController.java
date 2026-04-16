@@ -70,4 +70,15 @@ public ResponseEntity<List<Banner>> listarPorLoja(@PathVariable Long lojaId) {
         service.excluir(id);
         return ResponseEntity.ok("Banner removido!");
     }
+
+    @GetMapping("/admin/loja/{lojaId}")
+    public ResponseEntity<List<Banner>> listarTodosPorLoja(
+            @RequestHeader("Admin-Key") String key,
+            @PathVariable Long lojaId) {
+        if (adminKey.invalido(key)) {
+            return ResponseEntity.status(403).build();
+        }
+        List<Banner> banners = service.listarTodosPorLoja(lojaId);
+        return ResponseEntity.ok(banners);
+    }
 }

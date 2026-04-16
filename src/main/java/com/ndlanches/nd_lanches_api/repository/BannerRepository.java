@@ -12,4 +12,5 @@ public interface BannerRepository extends JpaRepository<Banner, Long> {
 
     // Apenas banners ativos (cardápio público)
     List<Banner> findByLojaIdAndAtivoTrue(Long lojaId);
+    List<Banner> findByLojaIdOrderByOrdemAsc(Long lojaId);
 }

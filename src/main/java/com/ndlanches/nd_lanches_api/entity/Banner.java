@@ -37,4 +37,7 @@ public class Banner {
     @ManyToOne
     @JoinColumn(name = "loja_id", nullable = false)
     private Loja loja;
+
+    @Column(name = "ordem")
+    private Integer ordem = 0;
 }
