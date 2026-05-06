@@ -2,6 +2,7 @@ package com.ndlanches.nd_lanches_api.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.ndlanches.nd_lanches_api.entity.Loja;
@@ -37,6 +38,7 @@ public class LojaService {
     }
 
     // Salva ou atualiza os dados da loja (nome, whatsapp, etc)
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Loja salvar(Loja loja) {
         return repository.save(loja);
     }

@@ -3,6 +3,7 @@ package com.ndlanches.nd_lanches_api.service;
 import com.ndlanches.nd_lanches_api.entity.Banner;
 import com.ndlanches.nd_lanches_api.repository.BannerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -26,11 +27,13 @@ public class BannerService {
     }
 
     // Admin — criar banner
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Banner salvar(Banner banner) {
         return repository.save(banner);
     }
 
     // Admin — editar banner
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Banner editar(Long id, Banner dados) {
         return repository.findById(id).map(b -> {
             b.setTitulo(dados.getTitulo());
@@ -43,6 +46,7 @@ public class BannerService {
     }
 
     // Admin — ativar/desativar rapidamente
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Banner alternarAtivo(Long id) {
         return repository.findById(id).map(b -> {
             b.setAtivo(!b.getAtivo());
@@ -51,6 +55,7 @@ public class BannerService {
     }
 
     // Admin — remover banner
+    @CacheEvict(value = "cardapio", allEntries = true)
     public void excluir(Long id) {
         repository.deleteById(id);
     }

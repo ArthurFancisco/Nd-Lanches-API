@@ -1,6 +1,7 @@
 package com.ndlanches.nd_lanches_api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import com.ndlanches.nd_lanches_api.entity.Produto;
@@ -24,16 +25,19 @@ public class ProdutoService {
 
 
     // Salva ou atualiza um produto (usado pelo Admin)
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Produto salvar(Produto produto) {
         return repository.save(produto);
     }
 
     // Deleta um produto
+    @CacheEvict(value = "cardapio", allEntries = true)
     public void excluir(Long id) {
         repository.deleteById(id);
     }
 
     // Atualiza todos os campos relevantes do produto
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Produto editar(Long id, Produto dadosNovos) {
         return repository.findById(id).map(produto -> {
             produto.setNome(dadosNovos.getNome());

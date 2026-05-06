@@ -4,6 +4,7 @@ import com.ndlanches.nd_lanches_api.entity.Pedido;
 import com.ndlanches.nd_lanches_api.entity.Pedido.StatusPedido;
 import com.ndlanches.nd_lanches_api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class PedidoService {
     private PedidoRepository repository;
 
     // Cliente envia o pedido — salva e retorna com ID gerado
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Pedido salvar(Pedido pedido) {
     pedido.setCriadoEm(LocalDateTime.now());
     pedido.setStatus(StatusPedido.RECEBIDO);   // ← setStatus, não setStatusPedido
@@ -37,6 +39,7 @@ public class PedidoService {
     }
 
     // Admin atualiza o status (RECEBIDO → PREPARO → PRONTO → ENTREGUE)
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Pedido atualizarStatus(Long id, String novoStatus) {
     return repository.findById(id).map(p -> {
         p.setStatus(StatusPedido.valueOf(novoStatus));
@@ -46,6 +49,7 @@ public class PedidoService {
     }
 
     // Admin cancela ou remove pedido
+    @CacheEvict(value = "cardapio", allEntries = true)
     public void excluir(Long id) {
         repository.deleteById(id);
     }

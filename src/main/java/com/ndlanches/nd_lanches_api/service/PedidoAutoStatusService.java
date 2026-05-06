@@ -4,6 +4,7 @@ import com.ndlanches.nd_lanches_api.entity.Pedido;
 import com.ndlanches.nd_lanches_api.entity.Pedido.StatusPedido;
 import com.ndlanches.nd_lanches_api.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class PedidoAutoStatusService {
      * Executa a cada 5 minutos (300000 ms)
      * Altera status de pedidos que estão há mais de 30 minutos no mesmo estágio.
      */
+    @CacheEvict(value = "cardapio", allEntries = true)
     @Scheduled(fixedDelay = 300000)
     @Transactional
     public void atualizarStatusAutomaticamente() {

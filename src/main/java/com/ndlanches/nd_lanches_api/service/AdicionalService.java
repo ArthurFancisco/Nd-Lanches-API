@@ -3,6 +3,7 @@ package com.ndlanches.nd_lanches_api.service;
 import com.ndlanches.nd_lanches_api.entity.Adicional;
 import com.ndlanches.nd_lanches_api.repository.AdicionalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class AdicionalService {
     }
 
     // Admin: cadastrar novo adicional
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Adicional salvar(Adicional adicional) {
         return repository.save(adicional);
     }
 
     // Admin: editar adicional existente
+    @CacheEvict(value = "cardapio", allEntries = true)
     public Adicional editar(Long id, Adicional dadosNovos) {
         return repository.findById(id).map(a -> {
             a.setNome(dadosNovos.getNome());
@@ -35,6 +38,7 @@ public class AdicionalService {
     }
 
     // Admin: remover adicional
+    @CacheEvict(value = "cardapio", allEntries = true)
     public void excluir(Long id) {
         repository.deleteById(id);
     }
