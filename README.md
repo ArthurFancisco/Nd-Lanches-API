@@ -43,7 +43,7 @@ controller → service → repository → entity
 ## Como executar
 
 ~~~bash
-git clone https://github.com/ArthurFancisco/Nd-Lanches-API.git
+git clone https://github.com/arthur-amancio/Nd-Lanches-API.git
 cd Nd-Lanches-API
 cp .env.example .env
 docker compose up --build
@@ -65,7 +65,7 @@ Nunca publique valores reais dessas variáveis.
 
 ## Frontend
 
-A interface que consome esta API está em [ArthurFancisco/NdLanches](https://github.com/ArthurFancisco/NdLanches).
+A interface que consome esta API está em [arthur-amancio/NdLanches](https://github.com/arthur-amancio/NdLanches).
 
 ## Licença
 
